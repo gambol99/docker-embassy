@@ -31,6 +31,7 @@ Below is collection of environment variables passed to  [embassy](https://github
 Essentially the two which *need* to passed are the discovery and services 
 
     $ docker -d -P \
+     --cap-add NET_ADMIN \
      -e EMBASSY_DISCOVERY=consul://IP:PORT \
      -e BACKENDS='frontend_http;80,mysql;3306,redis;6563' \
      ...
@@ -54,5 +55,5 @@ A very simple example
     RUN yum install -y httpd
     EXPOSE 80
   
-    $ docker run -d -P -e EMBASSY_DISCOVERY=consul://10.0.0.1:8500 <image>
+    $ docker run -d -P --cap-add NET_ADMIN -e EMBASSY_DISCOVERY=consul://10.0.0.1:8500 <image>
     ...
