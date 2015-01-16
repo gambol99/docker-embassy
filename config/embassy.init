@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+#   Author: Rohith (gambol99@gmail.com)
+#   Date: 2015-01-16 17:06:44 +0000 (Fri, 16 Jan 2015)
+#
+#  vim:ts=2:sw=2:et
+#
+NAME="Embassy Service Proxy"
+EMBASSY_VERBOSE=${EMBASSY_VERBOSE:-"-logtostderr=true -v=3"}
+EMBASSY_DISCOVERY=${EMBASSY_DISCOVERY:-"consul://localhost:8500"}
+EMBASSY_INERFACE=${EMBASSY_INERFACE:-eth0}
+EMBASSY_PORT=${EMBASSY_PORT:-9999}
+EMBASSY_PROXY=${EMBASSY_PROXY:-172.17.42.1}
+EMBASSY_OPTIONS="${EMBASSY_VERBOSE} \
+-interface=${EMBASSY_INERFACE} \
+-port=${EMBASSY_PORT} \
+-discovery=${EMBASSY_DISCOVERY} \
+-provider=static \
+-services=\"${BACKENDS}\""
+
+echo "Starting ${NAME}: "
+echo "Options: ${EMBASSY_OPTIONS}"
+
+echo "Adding the IPtables Rules for rediection"
+if iptables -t nat -I OUTPUT -p tcp --src 0/0 --dst ${EMBASSY_PROXY} -j REDIRECT --to-ports ${EMBASSY_PORT}; then
+  echo "Failed to add the iptables redirection rule"
+fi
+
+/bin/embassy ${EMBASSY_OPTIONS}
