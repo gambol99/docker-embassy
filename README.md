@@ -7,9 +7,9 @@ The container which acts as a base image for containers which require embedded [
 
 The default entrypoint for the container is [/bin/runner.sh](https://github.com/gambol99/docker-embassy/blob/master/config/runner.sh) unless changed, the runners performs the following;
 
-> **Shell**: drops you into a bash shell for debugging / testing purposed
-> **Service**: creates a supervisord service from the command line arguments and drops into supervisord in the foreground.
-> **Default**: assuming no command line arguments the default behavior is to drop into supervisord as above.
+ * **Shell**: drops you into a bash shell for debugging / testing purposed
+ * **Service**: creates a supervisord service from the command line arguments and drops into supervisord in the foreground.
+ * **Default**: assuming no command line arguments the default behavior is to drop into supervisord as above.
 
 #### **Embassy**
 
