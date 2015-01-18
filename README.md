@@ -55,5 +55,6 @@ A very simple example
     RUN yum install -y httpd
     EXPOSE 80
   
-    $ docker run -d -P --cap-add NET_ADMIN -e EMBASSY_DISCOVERY=consul://10.0.0.1:8500 <image>
+    $ docker run -d -P --cap-add NET_ADMIN \
+      -e EMBASSY_DISCOVERY=consul://10.0.0.1:8500 <image>
     ...
