@@ -58,3 +58,13 @@ A very simple example
     $ docker run -d -P --cap-add NET_ADMIN \
       -e EMBASSY_DISCOVERY=consul://10.0.0.1:8500 <image>
     ...
+
+##### Contributing
+------------
+
+ - Fork it
+ - Create your feature branch (git checkout -b my-new-feature)
+ - Commit your changes (git commit -am 'Add some feature')
+ - Push to the branch (git push origin my-new-feature)
+ - Create new Pull Request
+ - If applicable, update the README.md
