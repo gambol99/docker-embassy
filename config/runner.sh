@@ -10,13 +10,11 @@ SUPERVISORD_CONF=/etc/supervisord.conf
 SUPERVISORD_CONFD=/etc/supervisord.d/
 
 annonce() {
-  [ -n "$@" ] || {
-    echo "** $@";
-  }
+  [ -n "$@" ] || { echo "** $@"; }
 }
 
-runner_service() {
-  annonce "Adding the runner service to supervisord"
+create_service() {
+  annonce "Creating supervisor service from: ${COMMAND_ARGS}"
   cat <<EOF > ${SUPERVISORD_CONFD}/runner.conf
 [program:runner]
 user=root
@@ -30,16 +28,28 @@ EOF
   cat ${SUPERVISORD_CONFD}/runner.conf
 }
 
+run_services() {
+  annonce "Starting the supervisord daemon service in foreground"
+  $SUPERVISORD -c ${SUPERVISORD_CONF} -n
+}
+
 # step: grab the command line arguments pass to the docker
 COMMAND_ARGS="$@"
-annonce "Runner arguments: ${COMMAND_ARGS}"
+annonce "Service parameters: ${COMMAND_ARGS}"
 
-if ! [[ "${COMMAND_ARGS}" =~ ^/(usr/|)bin/(bash|sh|zsh).*$ ]]; then
-  # step: inject the command line into a supervisor service
-  runner_service "${COMMAND_ARGS}"
-  # step: run the supervisord process in foreground
-  annonce "Starting the supervisord daemon service"
-  $SUPERVISORD -c ${SUPERVISORD_CONF} -n
-else
-  exec "$@"
-fi
+case "$1" in
+  shell)
+    # step; create a shell
+    exec /bin/bash
+    ;;
+  service)
+    # step: we generate a service from the command line
+    create_service
+    # step: we jump into supervisor
+    run_services
+    ;;
+  *)
+    # step: default action is to run supervisord
+    run_services
+    ;;
+esac
